@@ -17,7 +17,6 @@ app.use('/', require(path.join(__dirname, 'routes/quotes')));
 
 app.use((req, res, next) => {
   const err = new Error(`${req.method} ${req.url} Not Found`);
-  res.header('Access-Control-Allow-Origin', '*');
   err.status = 404;
   next(err);
 });
@@ -25,7 +24,6 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500);
-  res.header('Access-Control-Allow-Origin', '*');
   res.json({
     error: {
       message: err.message,
