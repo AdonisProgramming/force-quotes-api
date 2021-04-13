@@ -4,12 +4,33 @@ const path = require('path');
 
 const router = express.Router();
 
+
+const getAll = async (req, res, next) => {
+  try {
+    const data = fs.readFileSync(path.join(__dirname, "./quotes.json"));
+    const quotes = JSON.parse(data);
+    const characterQuote = quotes.map( (quote) => quote);
+    if (!characterQuote) {
+      const err = new Error('character not found');
+      err.status = 404;
+      throw err;
+    }
+    res.json(characterQuote);
+  } catch (e) {
+    next(e);
+  }
+};
+
+router.route("/api/v1/quotes/").get(getAll);
+
+module.exports = router;
+
+
+
 const getQuotes = async (req, res, next) => {
   try {
     const data = fs.readFileSync(path.join(__dirname, "./quotes.json"));
     const quotes = JSON.parse(data);
-    const val = req.params.character;
-    console.log(val);
     const characterQuote = quotes.filter( (quote) => quote.character === req.params.character);
     if (!characterQuote) {
       const err = new Error('character not found');

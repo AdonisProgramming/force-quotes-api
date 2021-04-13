@@ -24,6 +24,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500);
+  res.header('Access-Control-Allow-Origin', '*');
   res.json({
     error: {
       message: err.message,
